@@ -17,6 +17,7 @@ namespace DapperLesson.Data
             _config = config;
         }
         private readonly IConfiguration _config;
+        private readonly string _connectionString = "DefaultConnection";
 
         public async Task<T> Create<T>(string query, DynamicParameters pars, CommandType commandType = CommandType.StoredProcedure)
         {
@@ -44,7 +45,7 @@ namespace DapperLesson.Data
 
         public DbConnection GetConnection()
         {
-            return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            return new SqlConnection(_config.GetConnectionString(_connectionString));
         }
 
         public async Task<T> Update<T>(string query, DynamicParameters pars, CommandType commandType = CommandType.StoredProcedure)

@@ -1,29 +1,28 @@
-﻿using System;
+﻿using DapperLesson.Attributes;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DapperLesson.Service.User
 {
-    [Table("person")]
+    [Table(Schema = "dbo", Name = "person")]
     public class PersonModel
     {
-        [Key]
-        [Column("id")]
+        [Column(DbType = DbType.Int32, Name = "user_id")]
         public int Id { get; set; }
 
-        [Column("fullname")]
+        [Column(DbType = DbType.String, Name = "fullname")]
         public string FullName { get; set; }
 
-        [Column("login")]
+        [Column(DbType = DbType.String, Name = "login")]
         public string Login { get; set; }
 
-        [Column("password")]
+        [Column(DbType = DbType.String, Name = "password")]
         public string Password { get; set; }
 
-        [Column("image_url")]
+        [Column(DbType = DbType.String, Name = "image_url")]
         public string ImageUrl { get; set; }
     }
 }

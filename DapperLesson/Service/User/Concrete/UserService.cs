@@ -29,7 +29,7 @@ namespace DapperLesson.Service.User.Concrete
 
         public async Task<PersonModel> Get(int Id)
         {
-            var result = await _dapper.Get<PersonModel>($"select * from person where id = {Id}", null, CommandType.Text);
+            var result = await _dapper.Get<PersonModel>($"select * from person where user_id = {Id}", null, CommandType.Text);
             return result;
         }
 
