@@ -37,5 +37,19 @@ namespace DapperLesson.Controllers
             var result = await _userService.Create(model);
             return Ok(result);
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            var result = await _userService.Delete(Id);
+            return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(int Id, PersonModel model)
+        {
+            var result = await _userService.Update(Id, model);
+            return Ok(result);
+        }
     }
 }
