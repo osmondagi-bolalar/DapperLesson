@@ -1,4 +1,5 @@
-﻿using DapperLesson.Data;
+﻿using Dapper;
+using DapperLesson.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,33 +18,48 @@ namespace DapperLesson.Service.User.Concrete
 
         public async Task<PersonModel> Create(PersonModel model)
         {
-            var result = await _dapper.Create<PersonModel>(@$"insert into Person(fullname, login, password, image_url) 
-                         values('{model.FullName}', '{model.Login}', '{model.Password}', '{model.ImageUrl}')", null, CommandType.Text);
+            DynamicParameters pars = new DynamicParameters();
+            pars.Add("FullName", model.FullName);
+            pars.Add("Login", model.Login);
+            pars.Add("Password", model.Password);
+            pars.Add("ImageUrl", model.ImageUrl);
+
+            var result = await _dapper.Create<PersonModel>(@$"CreatePerson", pars, CommandType.StoredProcedure);
             return result;
         }
 
         public async Task<bool> Delete(int Id)
         {
-            await _dapper.Delete<bool>($"delete from Person where Id = {Id}", null, CommandType.Text);
+            DynamicParameters pars = new DynamicParameters();
+            pars.Add("Id", Id);
+            await _dapper.Delete<bool>($"DeletePerson", pars, CommandType.StoredProcedure);
             return true;
         }
 
         public async Task<PersonModel> Get(int Id)
         {
-            var result = await _dapper.Get<PersonModel>($"select * from Person where Id = {Id}", null, CommandType.Text);
+            DynamicParameters pars = new DynamicParameters();
+            pars.Add("Id", Id);
+            var result = await _dapper.Get<PersonModel>($"GetPersonById", pars, CommandType.StoredProcedure);
             return result;
         }
 
         public async Task<IEnumerable<PersonModel>> GetAll()
         {
-            var results = await _dapper.GetAll<PersonModel>("select * from Person", null, CommandType.Text);
+            var results = await _dapper.GetAll<PersonModel>("[dbo].[GetAllPersons]", null, CommandType.StoredProcedure);
             return results;
         }
 
         public async Task<PersonModel> Update(int Id, PersonModel model)
         {
-            var result = await _dapper.Update<PersonModel>($@"update Person set FullName = {model.FullName}, Login = {model.Login}, 
-                                                Password = {model.Password}, ImageUrl = {model.ImageUrl} where Id = {Id}", null, CommandType.Text);
+            DynamicParameters pars = new DynamicParameters();
+            pars.Add("Id", Id);
+            pars.Add("FullName", model.FullName);
+            pars.Add("Login", model.Login);
+            pars.Add("Password", model.Password);
+            pars.Add("ImageUrl", model.ImageUrl);
+
+            var result = await _dapper.Update<PersonModel>("[dbo].[UpdatePerson]", pars, CommandType.StoredProcedure);
             return result;
         }
     }
